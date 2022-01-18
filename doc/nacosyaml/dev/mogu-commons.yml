@@ -1,0 +1,51 @@
+#spring
+spring:
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+  security:
+    user:
+      name: user
+      password: password123
+
+  # sleuth 配置
+  sleuth:
+    web:
+      client:
+        enabled: true
+    sampler:
+      probability: 1.0 # 采样比例为: 0.1(即10%),设置的值介于0.0到1.0之间，1.0则表示全部采集。
+  # zipkin 配置
+  zipkin:
+    base-url: http://localhost:9411  # 指定了Zipkin服务器的地址
+
+  #redis
+  redis:
+    host: 119.91.87.105 #redis的主机ip
+    port: 6379
+    database: 1
+    password: lilishop
+
+  rabbitmq:
+    host: 119.91.87.105 #rabbitmq的主机ip
+    port: 5672      # 注意5672才是RabbitMQ通信端口号！！ 15672是图形化界面的端口
+    username: admin
+    password: peiqi666
+
+  boot:
+    admin:
+      client:
+        enabled: true
+        url: http://localhost:8606
+        username: user
+        password: password123
+        instance:
+          service-base-url: http://localhost:8601
+
+  #nacos相关配置
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 159.75.247.241:8848
