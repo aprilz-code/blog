@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('拉取代码') {
+            steps {
+               checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'b960dcac-45ad-4079-bc24-49e0e62a0ed2', url: 'https://gitee.com/white_white_123456/blog.git']]])
+            }
+        }
+        stage('构建项目') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+          stage('推送项目') {
+            steps {
+                echo '推送项目成功'
+            }
+        }
+    }
+}
