@@ -98,7 +98,7 @@
                     <!-- 注意imageName一定要是符合正则[a-z0-9-_.]的，否则构建不会成功 -->
                     <imageName><imageName>${docker.repostory}/${docker.registry.name}/${project.artifactId}:${project.version}</imageName></imageName>
                     <dockerDirectory>${project.basedir}/src/main/resources</dockerDirectory>
-                    <rm>true</rm>
+
                     <resources>
                         <resource>
                             <targetPath>/</targetPath>
