@@ -1,7 +1,7 @@
 version: '3.1'
 services:
   portainer:
-    image: registry.cn-shenzhen.aliyuncs.com/white_blog/portainer
+    image: registry.cn-shenzhen.aliyuncs.com/whiteblog/portainer
     container_name: portainer
     ports:
       - 9000:9000

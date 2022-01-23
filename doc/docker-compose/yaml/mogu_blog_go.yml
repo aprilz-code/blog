@@ -2,7 +2,7 @@ version: '3'
 services:
   #授权服务
   mogu_blog_go:
-    image: registry.cn-shenzhen.aliyuncs.com/white_blog/mogu_blog_go:latest
+    image: registry.cn-shenzhen.aliyuncs.com/whiteblog/mogu_blog_go:latest
     container_name: mogu_blog_go
     restart: always
     ports:
