@@ -9,6 +9,7 @@ pipeline {
         }
         stage('构建项目') {
             steps {
+               sh 'docker ps'
                 sh 'mvn clean package  -Dmaven.test.skip=true  docker:build -DpushImage'
             }
         }
