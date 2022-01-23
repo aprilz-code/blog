@@ -52,6 +52,8 @@
         <spring.mock.version>2.0.8</spring.mock.version>
         <knife4j.version>3.0.2</knife4j.version>
         <spring-cloud-alibaba.version>2.2.4.RELEASE</spring-cloud-alibaba.version>
+        <docker.repostory>registry.cn-shenzhen.aliyuncs.com</docker.repostory>
+        <docker.registry.name>whiteblog</docker.registry.name>
 <!--        <sentinel.version>2.1.1.RELEASE</sentinel.version>-->
     </properties>
 

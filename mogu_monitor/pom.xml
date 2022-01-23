@@ -82,7 +82,7 @@
                 <version>1.2.0</version>
                 <configuration>
                     <!-- 注意imageName一定要是符合正则[a-z0-9-_.]的，否则构建不会成功 -->
-                    <imageName>registry.cn-shenzhen.aliyuncs.com/whiteblog/${project.artifactId}</imageName>
+                    <imageName><imageName>${docker.repostory}/${docker.registry.name}/${project.artifactId}:${project.version}</imageName></imageName>
                     <dockerDirectory>${project.basedir}/src/main/resources</dockerDirectory>
                     <rm>true</rm>
                     <resources>
@@ -92,6 +92,9 @@
                             <include>${project.build.finalName}.jar</include>
                         </resource>
                     </resources>
+                    <serverId>docker-aliyun</serverId>
+                    <registryUrl>${docker.repostory}</registryUrl>
+                    <pushImage>true</pushImage>
                 </configuration>
             </plugin>
         </plugins>
