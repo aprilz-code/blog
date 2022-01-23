@@ -14,7 +14,7 @@ pipeline {
         }
           stage('推送项目') {
             steps {
-                echo '推送项目成功'
+                echo '推送项目成功=='
             }
         }
     }
