@@ -14,9 +14,7 @@ pipeline {
         }
           stage('推送项目') {
             steps {
-                echo $WORKSPACE
-                echo $BUILD_NUMBER
-                echo '推送项目成功=='
+                echo '推送项目成功'
             }
         }
     }
