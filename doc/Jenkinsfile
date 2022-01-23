@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('拉取代码') {
             steps {
-               checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'b960dcac-45ad-4079-bc24-49e0e62a0ed2', url: 'https://gitee.com/white_white_123456/blog.git']]])
+              checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: '72f3026a-6d5f-4b2c-9483-a87811491046', url: 'git@gitee.com:white_white_123456/blog.git']]])
             }
         }
         stage('构建项目') {
