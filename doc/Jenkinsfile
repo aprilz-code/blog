@@ -1,21 +1,68 @@
 pipeline {
     agent any
+    environment{
+     //DHOST="-H 10.192.53.84:2376"
 
+     DHOST=""
+
+     // ADMIN_IMAGENAME="mogu_admin:$BUILD_NUMBER"
+
+     GATEWAY_IMAGENAME="mogu_gateway:$BUILD_NUMBER"
+
+     PICTURE_IMAGENAME="mogu_picture:$BUILD_NUMBER"
+
+     SMS_IMAGENAME="mogu_sms:$BUILD_NUMBER"
+
+     WEB_IMAGENAME="mogu_web:$BUILD_NUMBER"
+
+    }
     stages {
         stage('拉取代码') {
             steps {
               checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: '72f3026a-6d5f-4b2c-9483-a87811491046', url: 'git@gitee.com:white_white_123456/blog.git']]])
             }
         }
-        stage('构建项目') {
+        stage('代码编译') {
             steps {
                // sh 'mvn clean package  -Dmaven.test.skip=true  docker:build -DpushImage'
-               sh 'mvn clean package  -Dmaven.test.skip=true  docker:build'
+               sh '''
+               mvn clean package  -Dmaven.test.skip=true
+               rm -rf $WORKSPACE/mogu_gateway/resources/*.jar
+               cp $WORKSPACE/mogu_gateway/target/mogu_gateway-0.0.1-SNAPSHOT.jar $WORKSPACE/mogu_gateway/resources/mogu_gateway-1.0.0.jar
+
+               '''
+               echo '代码编译成功'
             }
         }
-          stage('推送项目') {
+        stage('构建镜像') {
+                    steps {
+                        sh '''
+                        docker ${DHOST} build -t $GATEWAY_IMAGENAME $WORKSPACE/mogu_gateway/resources
+
+                        '''
+                        echo '构建镜像成功'
+                    }
+        }
+         stage('部署项目') {
+                            steps {
+                                sh '''
+                                if docker ${DHOST} ps -a| grep -i mogu_gateway; then
+                                 docker ${DHOST} rm -f mogu_gateway
+                                fi
+                                sleep 3s
+                                docker ${DHOST} run -d --name mogu_gateway --net=nginx1_stack --privileged=true  -p 8607:8607 mogu_gateway:$BUILD_NUMBER
+
+                                '''
+                                echo '部署项目成功'
+                            }
+                }
+        stage('推送镜像') {
             steps {
-                echo '推送项目成功'
+                sh '''
+                docker ${DHOST} tag $GATEWAY_IMAGENAME registry.cn-shenzhen.aliyuncs.com/whiteblog/$GATEWAY_IMAGENAME
+                docker ${DHOST} push registry.cn-shenzhen.aliyuncs.com/whiteblog/$GATEWAY_IMAGENAME
+                '''
+                echo '推送镜像成功'
             }
         }
     }
