@@ -37,7 +37,7 @@ pipeline {
         stage('构建镜像') {
                     steps {
                         sh '''
-                        docker ${DHOST} build -t $GATEWAY_IMAGENAME $WORKSPACE/mogu_gateway/resources
+                        docker ${DHOST} build -t $GATEWAY_IMAGENAME $WORKSPACE/mogu_gateway/src/main/resources
 
                         '''
                         echo '构建镜像成功'
