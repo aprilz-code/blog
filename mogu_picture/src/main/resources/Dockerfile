@@ -1,4 +1,11 @@
 FROM openjdk:8-jre
-VOLUME /tmp
-ADD mogu_picture-0.0.1-SNAPSHOT.jar app.jar
-ENTRYPOINT ["java","-Xms256m","-Xmx256m","-jar","/app.jar"]
+MAINTAINER 1981196280@qq.com
+ENV TZ=Asia/Shanghai
+ENV LANG C.UTF-8
+ENV NLS_LANG "SIMPLIFIED CHINESE"
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+EXPOSE 8602
+ENV JAVA_OPT="-Xmx256m -Xms128m -Xmn256k"
+ADD  mogu_picture-1.0.0.jar   app.jar
+ENTRYPOINT java $JAVA_OPT -jar app.jar
