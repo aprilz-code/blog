@@ -28,7 +28,7 @@ pipeline {
                sh '''
                mvn clean package  -Dmaven.test.skip=true
                rm -rf $WORKSPACE/mogu_gateway/resources/*.jar
-               cp $WORKSPACE/mogu_gateway/target/mogu_gateway-0.0.1-SNAPSHOT.jar $WORKSPACE/mogu_gateway/resources/mogu_gateway-1.0.0.jar
+               cp $WORKSPACE/mogu_gateway/target/mogu_gateway-0.0.1-SNAPSHOT.jar $WORKSPACE/mogu_gateway/src/main/resources/mogu_gateway-1.0.0.jar
 
                '''
                echo '代码编译成功'
