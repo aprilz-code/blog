@@ -93,7 +93,7 @@ pipeline {
         stage('清除旧镜像') {
             steps {
                 sh '''
-                docker ${DHOST} rmi $(docker images | grep ^registry.cn-shenzhen.aliyuncs.com/whiteblog/ | grep -v "$BUILD_NUMBER" | awk '{print $3}')
+                docker ${DHOST} rmi $(docker images | grep ^registry.cn-shenzhen.aliyuncs.com/whiteblog/ | grep -v $BUILD_NUMBER | awk '{print $3}')
                 '''
                 echo '清除旧镜像成功'
             }
@@ -101,13 +101,13 @@ pipeline {
         stage('推送镜像') {
             steps {
                 sh '''
-                docker ${DHOST} push registry.cn-shenzhen.aliyuncs.com/whiteblog/$GATEWAY_IMAGENAME
+                docker ${DHOST} push $GATEWAY_IMAGENAME
 
-                 docker ${DHOST} push registry.cn-shenzhen.aliyuncs.com/whiteblog/$PICTURE_IMAGENAME
+                 docker ${DHOST} push $PICTURE_IMAGENAME
 
-                docker ${DHOST} push registry.cn-shenzhen.aliyuncs.com/whiteblog/$SMS_IMAGENAME
+                docker ${DHOST} push $SMS_IMAGENAME
 
-                docker ${DHOST} push registry.cn-shenzhen.aliyuncs.com/whiteblog/$WEB_IMAGENAME
+                docker ${DHOST} push $WEB_IMAGENAME
 
                 '''
                 echo '推送镜像成功'
