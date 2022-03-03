@@ -7,15 +7,14 @@ pipeline {
 
      // ADMIN_IMAGENAME="mogu_admin:$BUILD_NUMBER"
 
-     GATEWAY_IMAGENAME="mogu_gateway:$BUILD_NUMBER"
+     GATEWAY_IMAGENAME="registry.cn-shenzhen.aliyuncs.com/whiteblog/mogu_gateway:$BUILD_NUMBER"
 
-     PICTURE_IMAGENAME="mogu_picture:$BUILD_NUMBER"
+     PICTURE_IMAGENAME="registry.cn-shenzhen.aliyuncs.com/whiteblog/mogu_picture:$BUILD_NUMBER"
 
-     SMS_IMAGENAME="mogu_sms:$BUILD_NUMBER"
+     SMS_IMAGENAME="registry.cn-shenzhen.aliyuncs.com/whiteblog/mogu_sms:$BUILD_NUMBER"
 
-     WEB_IMAGENAME="mogu_web:$BUILD_NUMBER"
+     WEB_IMAGENAME="registry.cn-shenzhen.aliyuncs.com/whiteblog/mogu_web:$BUILD_NUMBER"
 
-     OLD_VERSION="$BUILD_NUMBER-1"
 
     }
     stages {
@@ -28,7 +27,6 @@ pipeline {
             steps {
                // sh 'mvn clean package  -Dmaven.test.skip=true  docker:build -DpushImage'
                sh '''
-               echo $OLD_VERSION
                mvn clean package  -Dmaven.test.skip=true
                rm -rf $WORKSPACE/mogu_gateway/resources/*.jar
                cp $WORKSPACE/mogu_gateway/target/mogu_gateway-0.0.1-SNAPSHOT.jar $WORKSPACE/mogu_gateway/src/main/resources/mogu_gateway-1.0.0.jar
@@ -68,44 +66,48 @@ pipeline {
                                  docker ${DHOST} rm -f mogu_gateway
                                 fi
                                 sleep 3s
-                                docker ${DHOST} run -d --name mogu_gateway --net=nginx1_stack --privileged=true  -p 8607:8607 mogu_gateway:$BUILD_NUMBER
+                                docker ${DHOST} run -d --name mogu_gateway --net=nginx1_stack --privileged=true  -p 8607:8607 $GATEWAY_IMAGENAME
 
                                 if docker ${DHOST} ps -a| grep -i mogu_picture; then
                                  docker ${DHOST} rm -f mogu_picture
                                 fi
                                 sleep 3s
-                                docker ${DHOST} run -d --name mogu_picture --net=nginx1_stack --privileged=true  -p 8602:8602 mogu_picture:$BUILD_NUMBER
+                                docker ${DHOST} run -d --name mogu_picture --net=nginx1_stack --privileged=true  -p 8602:8602 $PICTURE_IMAGENAME
 
                                 if docker ${DHOST} ps -a| grep -i mogu_sms; then
                                  docker ${DHOST} rm -f mogu_sms
                                 fi
                                 sleep 3s
-                                docker ${DHOST} run -d --name mogu_sms --net=nginx1_stack --privileged=true  -p 8604:8604 mogu_sms:$BUILD_NUMBER
+                                docker ${DHOST} run -d --name mogu_sms --net=nginx1_stack --privileged=true  -p 8604:8604 $SMS_IMAGENAME
 
                                 if docker ${DHOST} ps -a| grep -i mogu_web; then
                                  docker ${DHOST} rm -f mogu_web
                                 fi
                                 sleep 3s
-                                docker ${DHOST} run -d --name mogu_web --net=nginx1_stack --privileged=true  -p 8603:8603 mogu_web:$BUILD_NUMBER
+                                docker ${DHOST} run -d --name mogu_web --net=nginx1_stack --privileged=true  -p 8603:8603 $WEB_IMAGENAME
 
                                 '''
                                 echo '部署项目成功'
                             }
                 }
+        stage('清除旧镜像') {
+            steps {
+                sh '''
+                docker ${DHOST} rmi $(docker images | grep ^registry.cn-shenzhen.aliyuncs.com/whiteblog/ | grep -v $BUILD_NUMBER | awk '{print $3}')
+                '''
+                echo '清除旧镜像成功'
+            }
+        }
         stage('推送镜像') {
             steps {
                 sh '''
-                docker ${DHOST} tag $GATEWAY_IMAGENAME registry.cn-shenzhen.aliyuncs.com/whiteblog/$GATEWAY_IMAGENAME
-                docker ${DHOST} push registry.cn-shenzhen.aliyuncs.com/whiteblog/$GATEWAY_IMAGENAME
+                docker ${DHOST} push $GATEWAY_IMAGENAME
 
-                 docker ${DHOST} tag $PICTURE_IMAGENAME registry.cn-shenzhen.aliyuncs.com/whiteblog/$PICTURE_IMAGENAME
-                 docker ${DHOST} push registry.cn-shenzhen.aliyuncs.com/whiteblog/$PICTURE_IMAGENAME
+                 docker ${DHOST} push $PICTURE_IMAGENAME
 
-                docker ${DHOST} tag $SMS_IMAGENAME registry.cn-shenzhen.aliyuncs.com/whiteblog/$SMS_IMAGENAME
-                docker ${DHOST} push registry.cn-shenzhen.aliyuncs.com/whiteblog/$SMS_IMAGENAME
+                docker ${DHOST} push $SMS_IMAGENAME
 
-                docker ${DHOST} tag $WEB_IMAGENAME registry.cn-shenzhen.aliyuncs.com/whiteblog/$WEB_IMAGENAME
-                docker ${DHOST} push registry.cn-shenzhen.aliyuncs.com/whiteblog/$WEB_IMAGENAME
+                docker ${DHOST} push $WEB_IMAGENAME
 
                 '''
                 echo '推送镜像成功'
