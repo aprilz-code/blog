@@ -1,4 +1,4 @@
-FROM openjdk:8-jre
+FROM openjdk:8-alpine
 MAINTAINER 1981196280@qq.com
 ENV TZ=Asia/Shanghai
 ENV LANG C.UTF-8
