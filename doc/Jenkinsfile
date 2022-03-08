@@ -111,5 +111,15 @@ pipeline {
                 echo '推送镜像成功'
             }
         }
+
+         stage('清理镜像') {
+                    steps {
+                        sh '''
+                            docker rmi -f $(docker images | grep ^registry.cn-shenzhen.aliyuncs.com/whiteblog/ | grep -v $BUILD_NUMBER | awk '{print $3}')
+                            docker rmi -f $(docker images | grep ^mogu_ | grep -v $BUILD_NUMBER | awk '{print $3}')
+                        '''
+                        echo '清理镜像成功'
+                    }
+                }
     }
 }
