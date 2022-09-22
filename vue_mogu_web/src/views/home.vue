@@ -484,7 +484,7 @@
       </div>
       <div >
 
-        <a target="_blank" href="https://beian.miit.gov.cn/" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><p style="float:left;">{{info.recordNum}}</p></a>
+        <a target="_blank" href="https://beian.miit.gov.cn/" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><p style="float:left;">{{info.recordNum || '粤ICP备2021178269号-1'}}</p></a>
         <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030702004531" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="../assets/bn.png" style="float:left;"/><p style="float:left;">粤公网安备 44030702004531号</p></a>
       </div>
     </footer>
